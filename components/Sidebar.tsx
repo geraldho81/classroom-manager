@@ -153,7 +153,7 @@ export function Sidebar() {
                     <span className="font-heading text-lg whitespace-nowrap overflow-hidden flex items-center gap-1.5">
                       {item.name}
                       <div className="relative group/info">
-                        <Info className="w-3 h-3 text-stone-300 hover:text-stone-500 cursor-help transition-colors" />
+                        <Info className="w-3 h-3 text-stone-500 hover:text-stone-700 cursor-help transition-colors" />
                         <div className="absolute left-0 top-5 w-44 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50 shadow-lg">
                           {item.tooltip}
                           <div className="absolute -top-1 left-2 w-2 h-2 bg-stone-800 rotate-45" />
