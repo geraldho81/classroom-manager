@@ -84,7 +84,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
     const { data, error } = await supabase
       .from('students')
       .insert({ class_id: currentClassId, name: name.trim() })
-      .select()
+      .select('*')
       .single()
 
     if (!error && data) {
@@ -198,7 +198,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
           { student_id: studentId, date, status },
           { onConflict: 'student_id,date' }
         )
-        .select()
+        .select('*')
         .single()
 
       if (!error && data) {
@@ -243,7 +243,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
     const { data, error } = await supabase
       .from('attendance')
       .upsert(records, { onConflict: 'student_id,date' })
-      .select()
+      .select('*')
 
     if (!error && data) {
       set((state) => ({
@@ -297,7 +297,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
     const { data, error } = await supabase
       .from('notes')
       .insert({ class_id: currentClassId, text, date: today })
-      .select()
+      .select('*')
       .single()
 
     if (!error && data) {

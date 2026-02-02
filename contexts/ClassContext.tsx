@@ -132,7 +132,7 @@ export function ClassProvider({ children }: { children: React.ReactNode }) {
     const { data, error } = await supabase
       .from('classes')
       .insert({ user_id: user.id, name })
-      .select()
+      .select('*')
       .single()
 
     if (error || !data) {
