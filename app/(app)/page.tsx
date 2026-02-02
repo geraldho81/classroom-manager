@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
+import { Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useClass } from '@/contexts/ClassContext'
 
@@ -12,6 +14,7 @@ const tools = [
     emoji: '⏱️',
     gradient: 'from-blue-400 to-cyan-400',
     shadowColor: 'shadow-blue-500/30',
+    tooltip: 'Set countdown or count-up timers for activities, tests, or transitions between lessons.',
   },
   {
     name: 'Time Loss',
@@ -20,6 +23,7 @@ const tools = [
     emoji: '😱',
     gradient: 'from-red-400 to-orange-400',
     shadowColor: 'shadow-red-500/30',
+    tooltip: 'Track time lost due to interruptions or off-task behavior. Great for classroom management.',
   },
   {
     name: 'Pick Me!',
@@ -28,6 +32,7 @@ const tools = [
     emoji: '🎯',
     gradient: 'from-purple-400 to-pink-400',
     shadowColor: 'shadow-purple-500/30',
+    tooltip: 'Randomly select students to answer questions or participate in activities. Fair and fun!',
   },
   {
     name: 'Shh! Meter',
@@ -36,6 +41,7 @@ const tools = [
     emoji: '🔊',
     gradient: 'from-green-400 to-emerald-400',
     shadowColor: 'shadow-green-500/30',
+    tooltip: 'Monitor classroom noise levels in real-time. Helps students self-regulate volume.',
   },
   {
     name: 'Dice & Coin',
@@ -44,6 +50,7 @@ const tools = [
     emoji: '🎲',
     gradient: 'from-amber-400 to-yellow-400',
     shadowColor: 'shadow-amber-500/30',
+    tooltip: 'Roll dice or flip coins for games, decision-making, or random number generation.',
   },
   {
     name: 'Notes',
@@ -52,6 +59,7 @@ const tools = [
     emoji: '📝',
     gradient: 'from-pink-400 to-fuchsia-400',
     shadowColor: 'shadow-pink-500/30',
+    tooltip: 'Jot down quick notes, reminders, or important points during class.',
   },
   {
     name: 'Groups',
@@ -60,6 +68,7 @@ const tools = [
     emoji: '👥',
     gradient: 'from-cyan-400 to-blue-400',
     shadowColor: 'shadow-cyan-500/30',
+    tooltip: 'Automatically generate random groups or teams from your class list for activities.',
   },
   {
     name: 'Class List',
@@ -68,6 +77,7 @@ const tools = [
     emoji: '📋',
     gradient: 'from-teal-400 to-cyan-500',
     shadowColor: 'shadow-teal-500/30',
+    tooltip: 'View and manage all students in your currently selected class.',
   },
 ]
 
@@ -128,6 +138,17 @@ export default function Dashboard() {
               {/* Sparkle effect on hover */}
               <div className="absolute top-2 right-2 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
                 ✨
+              </div>
+
+              {/* Info tooltip */}
+              <div className="absolute top-2 left-2 group/info">
+                <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center cursor-help hover:bg-white/50 transition-colors">
+                  <Info className="w-4 h-4 text-white" />
+                </div>
+                <div className="absolute left-0 top-8 w-48 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-10 shadow-lg">
+                  {tool.tooltip}
+                  <div className="absolute -top-1 left-3 w-2 h-2 bg-stone-800 rotate-45" />
+                </div>
               </div>
             </div>
           </Link>

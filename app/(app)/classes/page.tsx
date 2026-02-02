@@ -198,7 +198,7 @@ export default function ClassesPage() {
                         </div>
                         {selectedClass?.id === cls.id && (
                           <span className="ml-auto px-4 py-1.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full border border-amber-200">
-                            Currently Reading
+                            In Session
                           </span>
                         )}
                       </button>

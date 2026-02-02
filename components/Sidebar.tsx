@@ -18,7 +18,8 @@ import {
   Sparkles,
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Info
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
@@ -27,17 +28,17 @@ import { useAuth } from '@/contexts/AuthContext'
 import { ClassSelector } from './ClassSelector'
 
 const navigation = [
-  { name: 'Home', href: '/', icon: Home, color: 'text-amber-700' },
-  { name: 'Timer', href: '/timer', icon: Timer, color: 'text-blue-500' },
-  { name: 'Time Loss', href: '/time-loss', icon: Clock, color: 'text-rose-500' },
-  { name: 'Class List', href: '/class-list', icon: UsersRound, color: 'text-emerald-600' },
-  { name: 'Pick Me!', href: '/picker', icon: Users, color: 'text-purple-500' },
-  { name: 'Shh! Meter', href: '/noise', icon: Volume2, color: 'text-cyan-600' },
-  { name: 'Dice & Coin', href: '/dice', icon: Dices, color: 'text-orange-500' },
-  { name: 'Notes', href: '/notes', icon: StickyNote, color: 'text-pink-500' },
-  { name: 'Groups', href: '/groups', icon: UsersRound, color: 'text-indigo-500' },
-  { name: 'My Classes', href: '/classes', icon: BookOpen, color: 'text-stone-600' },
-  { name: 'Settings', href: '/settings', icon: Settings, color: 'text-slate-500' },
+  { name: 'Home', href: '/', icon: Home, color: 'text-amber-700', tooltip: 'Return to the main dashboard and choose a tool.' },
+  { name: 'Timer', href: '/timer', icon: Timer, color: 'text-blue-500', tooltip: 'Set countdown or count-up timers for activities.' },
+  { name: 'Time Loss', href: '/time-loss', icon: Clock, color: 'text-rose-500', tooltip: 'Track time lost due to interruptions.' },
+  { name: 'My Classes', href: '/classes', icon: BookOpen, color: 'text-stone-600', tooltip: 'Create and manage your classroom groups.' },
+  { name: 'Class List', href: '/class-list', icon: UsersRound, color: 'text-emerald-600', tooltip: 'View and manage students in your class.' },
+  { name: 'Pick Me!', href: '/picker', icon: Users, color: 'text-purple-500', tooltip: 'Randomly select students to participate.' },
+  { name: 'Shh! Meter', href: '/noise', icon: Volume2, color: 'text-cyan-600', tooltip: 'Monitor classroom noise levels in real-time.' },
+  { name: 'Dice & Coin', href: '/dice', icon: Dices, color: 'text-orange-500', tooltip: 'Roll dice or flip coins for activities.' },
+  { name: 'Notes', href: '/notes', icon: StickyNote, color: 'text-pink-500', tooltip: 'Jot down quick notes and reminders.' },
+  { name: 'Groups', href: '/groups', icon: UsersRound, color: 'text-indigo-500', tooltip: 'Generate random groups from your class.' },
+  { name: 'Settings', href: '/settings', icon: Settings, color: 'text-slate-500', tooltip: 'Configure your preferences.' },
 ]
 
 export function Sidebar() {
@@ -153,8 +154,17 @@ export function Sidebar() {
                       {item.name}
                     </span>
                   )}
-                  {!sidebarCollapsed && isActive && (
-                    <span className="ml-auto text-amber-400">★</span>
+                  {!sidebarCollapsed && (
+                    <div className="ml-auto flex items-center gap-1">
+                      {isActive && <span className="text-amber-400">★</span>}
+                      <div className="relative group/info">
+                        <Info className="w-4 h-4 text-stone-400 hover:text-stone-600 cursor-help" />
+                        <div className="absolute right-0 top-6 w-48 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50 shadow-lg">
+                          {item.tooltip}
+                          <div className="absolute -top-1 right-3 w-2 h-2 bg-stone-800 rotate-45" />
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </Link>
               )
