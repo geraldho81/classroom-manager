@@ -1,9 +1,11 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
+import type { Database } from '@/lib/supabase/types'
 import { useEffect, useState } from 'react'
 
 export default function DebugPage() {
+    type Class = Database['public']['Tables']['classes']['Row']
     const [logs, setLogs] = useState<string[]>([])
     const [userId, setUserId] = useState<string>('Loading...')
 
@@ -45,6 +47,7 @@ export default function DebugPage() {
             .from('classes')
             .select('*')
             .eq('user_id', uid)
+            .returns<Class[]>()
 
         if (errEq) log('Error fetching classes (eq):', errEq)
         else log(`Found ${classesEq?.length} classes matching user_id.`)
@@ -58,6 +61,7 @@ export default function DebugPage() {
             .from('classes')
             .select('*')
             .limit(5)
+            .returns<Class[]>()
 
         if (errAll) log('Error fetching classes (all):', errAll)
         else {
