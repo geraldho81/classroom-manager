@@ -61,6 +61,14 @@ const tools = [
     gradient: 'from-cyan-400 to-blue-400',
     shadowColor: 'shadow-cyan-500/30',
   },
+  {
+    name: 'Class List',
+    description: 'View your students!',
+    href: '/class-list',
+    emoji: '📋',
+    gradient: 'from-teal-400 to-cyan-500',
+    shadowColor: 'shadow-teal-500/30',
+  },
 ]
 
 export default function Dashboard() {
