@@ -18,7 +18,7 @@ const quicksand = Quicksand({
 })
 
 export const metadata: Metadata = {
-  title: 'MyClassroom - Storybook Edition',
+  title: 'Classroom Manager',
   description:
     'A whimsical, cozy classroom management tool.',
   manifest: '/manifest.json',
