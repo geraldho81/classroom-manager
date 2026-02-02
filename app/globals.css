@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Storybook Palette */
+    --background: 40 33% 98%; /* Cream/Parchment #FFFDF7 */
+    --foreground: 34 14% 25%; /* Soft Espresso #4A4238 */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 34 14% 25%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 34 14% 25%;
+    
+    --primary: 3 100% 85%; /* Rose #FFB7B2 */
+    --primary-foreground: 34 14% 25%;
+    
+    --secondary: 160 55% 81%; /* Sage #B5EAD7 */
+    --secondary-foreground: 160 30% 25%;
+    
+    --muted: 40 20% 92%;
+    --muted-foreground: 34 10% 45%;
+    
+    --accent: 230 46% 85%; /* Periwinkle #C7CEEA */
+    --accent-foreground: 230 40% 30%;
+    
+    --destructive: 350 80% 80%;
+    --destructive-foreground: 350 40% 20%;
+
+    --border: 34 10% 85%;
+    --input: 34 10% 85%;
+    --ring: 3 100% 85%;
+
+    --radius: 1rem;
+    
+    /* Custom Storybook Variables */
+    --font-heading: var(--font-patrick);
+    --font-body: var(--font-quicksand);
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background-image: radial-gradient(#E8E3D9 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-normal tracking-wide;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading), cursive;
+  }
+  
+  .font-body {
+    font-family: var(--font-body), sans-serif;
+  }
+
+  /* Organic Shapes */
+  .rounded-organic {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  }
+  
+  .rounded-organic-2 {
+    border-radius: 25px 225px 25px 225px / 225px 25px 225px 25px;
+  }
+
+  /* Storybook Card */
+  .card-storybook {
+    @apply bg-white border-2 border-foreground/10 shadow-[4px_4px_0px_var(--primary)] transition-all duration-300;
+  }
+  
+  .card-storybook:hover {
+    @apply -translate-y-1 shadow-[6px_6px_0px_var(--secondary)];
+  }
+
+  /* Button Styles */
+  .btn-storybook {
+    @apply font-heading text-lg px-6 py-2 rounded-organic border-2 border-foreground/80 
+           bg-white shadow-[2px_2px_0px_rgba(0,0,0,0.1)] transition-all active:translate-y-0.5 active:shadow-none;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:brightness-105;
+  }
+
+  .text-shadow-sm {
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+  }
+}
+
+/* Animations */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+@keyframes wiggle-slow {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+.animate-wiggle-slow {
+  animation: wiggle-slow 3s ease-in-out infinite;
+}
