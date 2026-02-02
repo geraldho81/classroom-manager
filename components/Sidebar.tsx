@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -46,6 +47,7 @@ export function Sidebar() {
   const router = useRouter()
   const { sidebarCollapsed, toggleSidebar } = useUIStore()
   const { profile, signOut } = useAuth()
+  const [hoveredTooltip, setHoveredTooltip] = useState<{ text: string; top: number } | null>(null)
 
   const handleSignOut = async () => {
     await signOut()
@@ -150,19 +152,21 @@ export function Sidebar() {
                     )}
                   />
                   {!sidebarCollapsed && (
-                    <span className="font-heading text-lg whitespace-nowrap overflow-hidden flex items-center gap-1.5">
-                      {item.name}
-                      <div className="relative group/info">
-                        <Info className="w-3 h-3 text-stone-500 hover:text-stone-700 cursor-help transition-colors" />
-                        <div className="absolute left-0 top-5 w-44 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50 shadow-lg">
-                          {item.tooltip}
-                          <div className="absolute -top-1 left-2 w-2 h-2 bg-stone-800 rotate-45" />
-                        </div>
-                      </div>
-                    </span>
-                  )}
-                  {!sidebarCollapsed && isActive && (
-                    <span className="ml-auto text-amber-400">★</span>
+                    <>
+                      <span className="font-heading text-lg whitespace-nowrap flex items-center gap-1.5">
+                        {item.name}
+                        <Info
+                          className="w-3 h-3 text-stone-500 hover:text-stone-700 cursor-help transition-colors"
+                          onMouseEnter={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect()
+                            setHoveredTooltip({ text: item.tooltip, top: rect.top + rect.height / 2 })
+                          }}
+                          onMouseLeave={() => setHoveredTooltip(null)}
+                          onClick={(e) => e.preventDefault()}
+                        />
+                      </span>
+                      {isActive && <span className="ml-auto text-amber-400">★</span>}
+                    </>
                   )}
                 </Link>
               )
@@ -194,6 +198,21 @@ export function Sidebar() {
             </Button>
           </div>
         </div>
+
+        {/* Floating tooltip for nav items */}
+        {hoveredTooltip && !sidebarCollapsed && (
+          <div
+            className="fixed z-[200] w-48 p-2 bg-stone-800 text-white text-xs rounded-lg shadow-lg pointer-events-none"
+            style={{
+              left: '290px',
+              top: hoveredTooltip.top,
+              transform: 'translateY(-50%)',
+            }}
+          >
+            {hoveredTooltip.text}
+            <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-stone-800 rotate-45" />
+          </div>
+        )}
       </aside>
     </>
   )
