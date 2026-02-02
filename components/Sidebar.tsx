@@ -165,7 +165,7 @@ export function Sidebar() {
           <div className="p-4 border-t-2 border-dashed border-stone-300 bg-white/30">
             {profile && !sidebarCollapsed && (
               <div className="bg-white/40 rounded-xl px-3 py-2 mb-2">
-                <p className="text-stone-500 text-xs font-heading">Reading with</p>
+                <p className="text-stone-500 text-xs font-heading">Classroom by</p>
                 <p className="text-stone-800 font-bold truncate text-sm">
                   {profile.first_name}
                 </p>
