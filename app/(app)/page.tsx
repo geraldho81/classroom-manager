@@ -123,32 +123,30 @@ export default function Dashboard() {
               }}
             >
               {/* Emoji */}
-              <div className="text-5xl sm:text-6xl mb-3 transition-transform group-hover:scale-125 group-hover:animate-bounce">
+              <div className="text-5xl sm:text-6xl mb-3 transition-transform group-hover:scale-125 group-hover:animate-bounce text-center">
                 {tool.emoji}
               </div>
 
               {/* Text */}
-              <h3 className="text-lg sm:text-xl font-black text-white drop-shadow-lg">
-                {tool.name}
-              </h3>
-              <p className="text-sm text-white/80 font-medium mt-1">
-                {tool.description}
-              </p>
+              <div className="text-center">
+                <h3 className="text-lg sm:text-xl font-black text-white drop-shadow-lg inline-flex items-center justify-center gap-1">
+                  {tool.name}
+                  <div className="relative group/info">
+                    <Info className="w-3.5 h-3.5 text-white/60 hover:text-white cursor-help transition-colors" />
+                    <div className="absolute left-1/2 -translate-x-1/2 top-5 w-44 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-10 shadow-lg text-left font-normal">
+                      {tool.tooltip}
+                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-stone-800 rotate-45" />
+                    </div>
+                  </div>
+                </h3>
+                <p className="text-sm text-white/80 font-medium mt-1">
+                  {tool.description}
+                </p>
+              </div>
 
               {/* Sparkle effect on hover */}
               <div className="absolute top-2 right-2 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
                 ✨
-              </div>
-
-              {/* Info tooltip */}
-              <div className="absolute top-2 left-2 group/info">
-                <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center cursor-help hover:bg-white/50 transition-colors">
-                  <Info className="w-4 h-4 text-white" />
-                </div>
-                <div className="absolute left-0 top-8 w-48 p-2 bg-stone-800 text-white text-xs rounded-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-10 shadow-lg">
-                  {tool.tooltip}
-                  <div className="absolute -top-1 left-3 w-2 h-2 bg-stone-800 rotate-45" />
-                </div>
               </div>
             </div>
           </Link>
