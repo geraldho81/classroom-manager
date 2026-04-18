@@ -17,10 +17,14 @@ const diceValues: Record<number, string[][]> = {
   6: [['●', '', '●'], ['●', '', '●'], ['●', '', '●']],
 }
 
+const DICE_SIDES = [4, 6, 8, 10, 12, 20] as const
+type DiceSides = (typeof DICE_SIDES)[number]
+
 export function DiceCoin() {
   const { soundEnabled } = useSettingsStore()
 
   // Dice state
+  const [diceSides, setDiceSides] = useState<DiceSides>(6)
   const [diceCount, setDiceCount] = useState(1)
   const [diceResults, setDiceResults] = useState<number[]>([])
   const [isRollingDice, setIsRollingDice] = useState(false)
@@ -43,7 +47,7 @@ export function DiceCoin() {
     let animCount = 0
     const animInterval = setInterval(() => {
       const tempResults = Array.from({ length: diceCount }, () =>
-        getRandomInt(1, 6)
+        getRandomInt(1, diceSides)
       )
       setDiceResults(tempResults)
       animCount++
@@ -51,7 +55,7 @@ export function DiceCoin() {
       if (animCount >= 10) {
         clearInterval(animInterval)
         const finalResults = Array.from({ length: diceCount }, () =>
-          getRandomInt(1, 6)
+          getRandomInt(1, diceSides)
         )
         setDiceResults(finalResults)
         setDiceHistory((prev) => [finalResults, ...prev.slice(0, 9)])
@@ -61,7 +65,7 @@ export function DiceCoin() {
         }
       }
     }, 80)
-  }, [diceCount, soundEnabled])
+  }, [diceCount, diceSides, soundEnabled])
 
   const flipCoin = useCallback(() => {
     setIsFlippingCoin(true)
@@ -126,29 +130,49 @@ export function DiceCoin() {
             {/* Dice Display */}
             <div className="flex flex-wrap justify-center gap-4 mb-6 min-h-[120px] items-center">
               {diceResults.length > 0 ? (
-                diceResults.map((value, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      'w-20 h-20 bg-white border-2 border-foreground/20 rounded-xl shadow-md',
-                      'grid grid-cols-3 gap-1 p-2',
-                      isRollingDice && 'animate-shake'
-                    )}
-                  >
-                    {diceValues[value].map((row, rowIdx) =>
-                      row.map((cell, cellIdx) => (
-                        <div
-                          key={`${rowIdx}-${cellIdx}`}
-                          className="flex items-center justify-center"
-                        >
-                          {cell && (
-                            <div className="w-3 h-3 bg-foreground rounded-full" />
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                ))
+                diceResults.map((value, index) =>
+                  diceSides === 6 ? (
+                    <div
+                      key={index}
+                      className={cn(
+                        'w-20 h-20 bg-white border-2 border-foreground/20 rounded-xl shadow-md',
+                        'grid grid-cols-3 gap-1 p-2',
+                        isRollingDice && 'animate-shake'
+                      )}
+                    >
+                      {diceValues[value].map((row, rowIdx) =>
+                        row.map((cell, cellIdx) => (
+                          <div
+                            key={`${rowIdx}-${cellIdx}`}
+                            className="flex items-center justify-center"
+                          >
+                            {cell && (
+                              <div className="w-3 h-3 bg-foreground rounded-full" />
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className={cn(
+                        'w-20 h-20 bg-gradient-to-br from-amber-100 to-amber-200 border-2 border-amber-400/60 shadow-md',
+                        'flex items-center justify-center font-black text-3xl text-amber-900 tabular-nums',
+                        diceSides === 4 && 'rounded-tl-3xl rounded-br-3xl',
+                        diceSides === 8 && 'rotate-45',
+                        diceSides === 10 && 'rounded-[40%]',
+                        diceSides === 12 && 'rounded-full',
+                        diceSides === 20 && 'rounded-2xl',
+                        isRollingDice && 'animate-shake'
+                      )}
+                    >
+                      <span className={cn(diceSides === 8 && '-rotate-45')}>
+                        {value}
+                      </span>
+                    </div>
+                  )
+                )
               ) : (
                 <div className="text-muted-foreground">Click Roll to start</div>
               )}
@@ -163,6 +187,21 @@ export function DiceCoin() {
                 </span>
               </div>
             )}
+
+            {/* Dice Type Selector */}
+            <div className="flex items-center justify-center gap-2 mb-3 flex-wrap">
+              <span className="text-sm text-muted-foreground">Type:</span>
+              {DICE_SIDES.map((sides) => (
+                <Button
+                  key={sides}
+                  variant={diceSides === sides ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setDiceSides(sides)}
+                >
+                  d{sides}
+                </Button>
+              ))}
+            </div>
 
             {/* Dice Count Selector */}
             <div className="flex items-center justify-center gap-2 mb-6">

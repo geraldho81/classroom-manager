@@ -11,6 +11,13 @@ type SoundType =
   | 'diceRoll'
   | 'coinFlip'
   | 'fanfare'
+  | 'applause'
+  | 'drumroll'
+  | 'fail'
+  | 'crickets'
+  | 'buzzer'
+  | 'airhorn'
+  | 'clap'
 
 class SoundManager {
   private audioContext: AudioContext | null = null
@@ -87,7 +94,58 @@ class SoundManager {
       case 'fanfare':
         await this.playFanfare()
         break
+      case 'applause':
+        await this.playApplause()
+        break
+      case 'drumroll':
+        await this.playDrumroll()
+        break
+      case 'fail':
+        await this.playFail()
+        break
+      case 'crickets':
+        await this.playCrickets()
+        break
+      case 'buzzer':
+        await this.playBuzzer()
+        break
+      case 'airhorn':
+        await this.playAirhorn()
+        break
+      case 'clap':
+        await this.playClap()
+        break
     }
+  }
+
+  private async playClap() {
+    const ctx = this.getContext()
+    const duration = 0.12
+    const bufferSize = Math.floor(ctx.sampleRate * duration)
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1)
+    }
+    const noise = ctx.createBufferSource()
+    noise.buffer = buffer
+
+    const bp = ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.frequency.value = 1800
+    bp.Q.value = 1.2
+
+    const gain = ctx.createGain()
+    const now = ctx.currentTime
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0.9, now + 0.005)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+
+    noise.connect(bp)
+    bp.connect(gain)
+    gain.connect(ctx.destination)
+    noise.start(now)
+    noise.stop(now + duration)
   }
 
   private async playBell() {
@@ -189,6 +247,92 @@ class SoundManager {
       this.playTone(1047, 0.3, 'sine') // High C
       this.playTone(1319, 0.25, 'sine') // High E
     }, 450)
+  }
+
+  // Applause - white-noise burst that swells then fades
+  private async playApplause() {
+    const ctx = this.getContext()
+    const duration = 1.6
+    const bufferSize = ctx.sampleRate * duration
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.6
+    }
+    const noise = ctx.createBufferSource()
+    noise.buffer = buffer
+
+    const bandpass = ctx.createBiquadFilter()
+    bandpass.type = 'bandpass'
+    bandpass.frequency.value = 2200
+    bandpass.Q.value = 0.8
+
+    const gain = ctx.createGain()
+    const now = ctx.currentTime
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0.6, now + 0.25)
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0.35, now + duration - 0.2)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration)
+
+    noise.connect(bandpass)
+    bandpass.connect(gain)
+    gain.connect(ctx.destination)
+    noise.start(now)
+    noise.stop(now + duration)
+  }
+
+  // Drumroll - rapid ticks that ends with a thud
+  private async playDrumroll() {
+    const count = 28
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => this.playTone(180 + (i % 2) * 30, 0.03, 'square'), i * 35)
+    }
+    setTimeout(() => this.playTone(90, 0.35, 'triangle'), count * 35 + 60)
+  }
+
+  // Fail - sad trombone (descending notes)
+  private async playFail() {
+    const notes = [392, 370, 349, 330]
+    for (let i = 0; i < notes.length; i++) {
+      setTimeout(() => this.playTone(notes[i], 0.28, 'sawtooth'), i * 180)
+    }
+  }
+
+  // Crickets - periodic high chirps
+  private async playCrickets() {
+    const chirpTimes = [0, 250, 500, 900, 1150, 1400]
+    chirpTimes.forEach((t) => {
+      setTimeout(() => {
+        this.playTone(4800, 0.04, 'triangle')
+        setTimeout(() => this.playTone(4800, 0.04, 'triangle'), 70)
+      }, t)
+    })
+  }
+
+  // Buzzer - harsh low square wave
+  private async playBuzzer() {
+    await this.playTone(140, 0.6, 'square')
+  }
+
+  // Airhorn - two loud descending blasts
+  private async playAirhorn() {
+    const ctx = this.getContext()
+    const blast = (start: number, duration: number) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(520, ctx.currentTime + start)
+      osc.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + start + duration)
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime + start)
+      gain.gain.exponentialRampToValueAtTime(this.volume * 0.7, ctx.currentTime + start + 0.03)
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + duration)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(ctx.currentTime + start)
+      osc.stop(ctx.currentTime + start + duration)
+    }
+    blast(0, 0.4)
+    blast(0.5, 0.6)
   }
 }
 

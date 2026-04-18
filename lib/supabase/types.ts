@@ -120,6 +120,99 @@ export type Database = {
         }
         Relationships: []
       }
+      behavior_events: {
+        Row: {
+          id: string
+          student_id: string
+          delta: number
+          reason: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          delta: number
+          reason?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          delta?: number
+          reason?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      seating_layouts: {
+        Row: {
+          id: string
+          class_id: string
+          name: string
+          positions: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          class_id: string
+          name: string
+          positions?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          class_id?: string
+          name?: string
+          positions?: Json
+          created_at?: string
+        }
+        Relationships: []
+      }
+      hall_passes: {
+        Row: {
+          id: string
+          student_id: string
+          left_at: string
+          returned_at: string | null
+          reason: string | null
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          left_at?: string
+          returned_at?: string | null
+          reason?: string | null
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          left_at?: string
+          returned_at?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      student_badges: {
+        Row: {
+          id: string
+          student_id: string
+          badge_slug: string
+          awarded_at: string
+        }
+        Insert: {
+          id?: string
+          student_id: string
+          badge_slug: string
+          awarded_at?: string
+        }
+        Update: {
+          id?: string
+          student_id?: string
+          badge_slug?: string
+          awarded_at?: string
+        }
+        Relationships: []
+      }
       user_settings: {
         Row: {
           id: string

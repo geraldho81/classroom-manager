@@ -32,6 +32,7 @@ interface ClassState {
 
   // Attendance
   fetchAttendance: (classId: string, date: string) => Promise<void>
+  fetchAttendanceRange: (classId: string, startDate: string, endDate: string) => Promise<void>
   setAttendance: (studentId: string, date: string, status?: AttendanceStatus) => Promise<void>
   setAllAttendance: (date: string, status: AttendanceStatus) => Promise<void>
   clearAttendance: (date: string) => Promise<void>
@@ -183,6 +184,19 @@ export const useClassStore = create<ClassState>((set, get) => ({
       .select('*, students!inner(class_id)')
       .eq('students.class_id', classId)
       .eq('date', date)
+
+    set({ attendance: data || [] })
+  },
+
+  fetchAttendanceRange: async (classId, startDate, endDate) => {
+    const supabase = createClient()
+
+    const { data } = await supabase
+      .from('attendance')
+      .select('*, students!inner(class_id)')
+      .eq('students.class_id', classId)
+      .gte('date', startDate)
+      .lte('date', endDate)
 
     set({ attendance: data || [] })
   },
